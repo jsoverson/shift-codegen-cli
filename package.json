@@ -1,0 +1,33 @@
+{
+  "name": "shift-codegen-cli",
+  "version": "0.0.0",
+  "description": "Command line tool to generate JavaScript from JSON",
+  "main": "shift-codegen",
+  "bin": {
+    "shift-codegen": "./shift-codegen"
+  },
+  "scripts": {},
+  "preferGlobal": true,
+  "author": "Jarrod Overson",
+  "files": [
+    "shift-codegen",
+    "README.md"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jsoverson/shift-codegen-cli.git"
+  },
+  "keywords": [
+    "ast",
+    "shift",
+    "ecmascript",
+    "javascript",
+    "codegen",
+    "json"
+  ],
+  "license": "ISC",
+  "dependencies": {
+    "get-stdin": "^7.0.0",
+    "shift-codegen": "^6.0.0"
+  }
+}

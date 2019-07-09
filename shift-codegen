@@ -1,0 +1,60 @@
+#!/usr/bin/env node
+
+const getStdin = require('get-stdin');
+
+const codegen = require('shift-codegen').default;
+const FormattedCodeGen = require('shift-codegen').FormattedCodeGen;
+
+let fileContents;
+
+let args = process.argv.slice(2);
+
+function printUsage(code = 0) {
+  console.log(`
+Usage: shift-codegen ast.json
+
+If JSON is piped to shift-codegen then the arguments are ignored
+`);
+  process.exit(code);
+}
+
+(async () => {
+  if (process.stdin.isTTY) {
+    const file = args[0];
+  
+    if (!file) printUsage(1);
+    try {
+      fileContents = require("fs").readFileSync(file, { encoding: "utf8" });
+    } catch (e) {
+      console.error(`Can not read file`);
+      process.exit(2);
+    }
+  } else {
+    fileContents = await getStdin();
+    if (!fileContents) printUsage(1);
+  }
+
+  let ast;
+
+  try {
+    ast = JSON.parse(fileContents);
+  } catch(e) {
+    console.error(`Could not parse JSON: ${e.description}`);
+    process.exit(4);
+  }
+
+  try {
+    if (ast.length > 0) {
+      ast.forEach(_ => {
+        const formatted = codegen(_, new FormattedCodeGen());
+        console.log(formatted);        
+      })
+    } else {
+      const formatted = codegen(ast, new FormattedCodeGen());
+      console.log(formatted);  
+    }
+  } catch (e) {
+    console.error(`Could not generate JavaScript from JSON: ${e}`);
+    process.exit(3);
+  }
+})();
